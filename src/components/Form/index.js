@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import Button from '../Button'
 import Dropdown from '../Dropdown'
-import TextField from '../TextField'
+import Field from '../Field'
+import {v4 as uuid} from 'uuid';
+
 import './Form.css'
 
 const Form = (props) => {
@@ -10,15 +12,19 @@ const Form = (props) => {
   const [valueCargo, setCargo] = useState('');
   const [valueImagem, setImagem] = useState('');
   const [valueTime, setTime] = useState('');
+  
+  const [valueTeamName, setTeamName] = useState('');
+  const [valueTeamColor, setTeamColor] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmitCollaborator = (event) => {
     event.preventDefault()
     
     props.handleCollaboratorRegistered({
-      valueNome, 
-      valueCargo, 
-      valueImagem, 
-      valueTime
+      'id': uuid(),
+      'valueNome': valueNome, 
+      'valueCargo': valueCargo, 
+      'valueImagem': valueImagem, 
+      'valueTime': valueTime
     })
 
     setNome('')
@@ -26,41 +32,83 @@ const Form = (props) => {
     setImagem('')
     setTime('')
   }
+
+  const handleSubmitTeam = (event) => {
+    event.preventDefault()
+
+    props.handleTeamRegistred({
+      'id': uuid(),
+      'teamName': valueTeamName,
+      'teamColor': valueTeamColor,
+    })
+
+    setTeamName('')
+    setTeamColor('')
+  }
   
   return (
     <section className='form'>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmitCollaborator}>
         <h2>Preencha os dados para criar o card do colaborador</h2>
 
-        <TextField 
-        label="Nome" 
-        placeholder="Digite seu nome" 
-        value={valueNome}
-        handleChange={value => setNome(value)}
-        required={true} />
+        <Field 
+          label="Nome" 
+          placeholder="Digite seu nome" 
+          value={valueNome}
+          handleChange={value => setNome(value)}
+          required 
+        />
 
-        <TextField 
-        label="Cargo" 
-        placeholder="Digite seu cargo" 
-        value={valueCargo}
-        handleChange={value => setCargo(value)}
-        required={true} />
+        <Field 
+          label="Cargo" 
+          placeholder="Digite seu cargo" 
+          value={valueCargo}
+          handleChange={value => setCargo(value)}
+          required 
+        />
 
-        <TextField 
-        label="Imagem" 
-        value={valueImagem}
-        handleChange={value => setImagem(value)}
-        placeholder="Informe o endereço da imagem" />
+        <Field 
+          label="Imagem" 
+          value={valueImagem}
+          handleChange={value => setImagem(value)}
+          placeholder="Informe o endereço da imagem" 
+        />
 
         <Dropdown 
-        label="Time" 
-        itens={props.teams} 
-        required={true}
-        value={valueTime}
-        handleChange={value => setTime(value)} />
+          label="Time" 
+          itens={props.teams} 
+          required={true}
+          value={valueTime}
+          handleChange={value => setTime(value)} 
+        />
 
         <Button>
           Criar card
+        </Button>
+      </form>
+      
+      <form onSubmit={handleSubmitTeam}>
+        <h2>Preencha os dados para criar um novo time</h2>
+
+        <Field 
+          label="Nome do time" 
+          placeholder="Digite o nome do time" 
+          value={valueTeamName}
+          handleChange={value => setTeamName(value)}
+          required 
+        />
+
+        <Field 
+          label="Cor do time" 
+          fieldType='color'
+          placeholder="Digite a cor do time" 
+          value={valueTeamColor}
+          handleChange={value => setTeamColor(value)}
+          required 
+        />
+
+        <Button>
+          Criar um novo time
         </Button>
       </form>
     </section>

@@ -1,26 +1,43 @@
 import Collaborator from '../Collaborator'
+import hexToRgba from 'hex-to-rgba'
 import './Team.css'
 
-const Team = (props) => {
+const Team = ({
+  collaborators, 
+  teamColor, 
+  team, 
+  handleDeleteCollaborator,
+  handleChangeTeamColor,
+  handleFavoriteCollaborator }) => {
   
   return (
-    (props.collaborators.length > 0) ? 
-      <section className='team' style={{ backgroundColor: props.secondaryColor }}>
-        <h3 style={{ borderColor: props.primaryColor }}>
-          {props.team.teamName}
+    (collaborators.length > 0) ? 
+      <section className='team' style={{ backgroundColor: hexToRgba(teamColor, 0.35) }}>
+        
+        <h3 style={{ borderColor: teamColor }}>
+          {team.teamName}
         </h3>
+        
+        <input 
+          value={teamColor} 
+          type='color' 
+          className='team__input-color' 
+          onChange={event => handleChangeTeamColor(team.id, event.target.value)} />
 
         <div className='team__collaborators'>
 
-          {props.collaborators.map(collaborator => {
-            const key = props.team.teamName + collaborator.valueNome
+          {collaborators.map(collaborator => {
+
             return (
               <Collaborator 
-                key={key}
+                key={collaborator.id}
+                collaborator={collaborator}
                 collaboratorImage={collaborator.valueImagem}
                 collaboratorName={collaborator.valueNome}
                 collaboratorPosition={collaborator.valueCargo}
-                primaryColor={props.primaryColor} />
+                teamColor={teamColor}
+                handleDelete={handleDeleteCollaborator}
+                handleFavoriteCollaborator={handleFavoriteCollaborator} />
             )
           })}
 

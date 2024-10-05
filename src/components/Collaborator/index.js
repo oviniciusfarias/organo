@@ -1,27 +1,53 @@
 import './Collaborator.css'
+import { AiOutlineUserDelete  } from 'react-icons/ai'
+import { MdFavorite, MdFavoriteBorder } from 'react-icons/md'
 
 const Collaborator = ({ 
-    collaboratorImage, 
-    collaboratorName, 
-    collaboratorPosition, 
-    primaryColor 
+    collaborator,
+    teamColor,
+    handleDelete,
+    handleFavoriteCollaborator
   }) => {
+  
+  console.log('renderizando colaborador', collaborator);
 
   return (
     <div className='collaborator'>
-      <div className='collaborator__header' style={{ backgroundColor: primaryColor }}>
+      <button 
+        type="button" 
+        className='collaborator__delete' 
+        onClick={ () => handleDelete(collaborator.id) } 
+        title="Deletar colaborador">
+
+        <AiOutlineUserDelete  />
+      </button>
+      <div className='collaborator__header' style={{ backgroundColor: teamColor }}>
         <img 
           className='collaborator__image' 
-          src={collaboratorImage}
-          alt={collaboratorName} />
+          src={collaborator.valueImagem}
+          alt={collaborator.valueNome} />
       </div>
       <div className='collaborator__footer'>
         <h4 className='collaborator__name'>
-          {collaboratorName}
+          {collaborator.valueNome}
         </h4>
         <h5 className='collaborator__position'>
-          {collaboratorPosition}
+          {collaborator.valueCargo}
         </h5>
+
+        <div className='favorite'>
+          
+          <button 
+            type='button' 
+            onClick={() => handleFavoriteCollaborator(collaborator.id) }
+            title={collaborator.favorite ? 'Retirar dos favoritos' : 'Favoritar'}
+          >
+            {collaborator.favorite 
+              ? <MdFavorite size={25} color='#ff0000' /> 
+              : <MdFavoriteBorder size={25} /> 
+            }
+          </button>
+        </div>
       </div>
     </div>
   )
